@@ -3,7 +3,12 @@
 ARG JUPYTERHUB_VERSION
 FROM jupyterhub/jupyterhub-onbuild
 
+COPY ./pip.conf /etc/pip.conf
+COPY ./sources.list /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install -y libpq-dev gcc python3-dev
 # Install dockerspawner, oauth, postgres
+RUN /usr/local/bin/pip install --no-cache-dir --upgrade pip
 RUN /usr/local/bin/pip install --no-cache-dir \
         psycopg2 \
         oauthenticator \
