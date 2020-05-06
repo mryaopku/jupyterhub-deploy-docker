@@ -12,13 +12,14 @@ c = get_config()
 
 # Spawn single-user servers as Docker containers
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
+# Spawn containers from this image
+c.DockerSpawner.container_image = os.environ['DOCKER_NOTEBOOK_IMAGE']
+# must start container as root in order to grant sudo permissions
 c.DockerSpawner.extra_create_kwargs = {'user': 'root'}
 c.DockerSpawner.environment = {
   'GRANT_SUDO': '1',
   'UID': '0', # workaround https://github.com/jupyter/docker-stacks/pull/420
 }
-# Spawn containers from this image
-c.DockerSpawner.container_image = os.environ['DOCKER_NOTEBOOK_IMAGE']
 # JupyterHub requires a single-user instance of the Notebook server, so we
 # default to using the `start-singleuser.sh` script included in the
 # jupyter/docker-stacks *-notebook images as the Docker run command when
